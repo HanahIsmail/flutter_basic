@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_basic/mahasiswa.dart';
 
 void main() {
   runApp(const MyApp());
@@ -9,7 +10,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -32,35 +32,61 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  bool isLoading = true;
+
+  List<Mahasiswa> listMahasiswa = [
+    Mahasiswa(nim: 123, name: 'Siti', address: 'Hutabohu'),
+    Mahasiswa(nim: 456, name: 'Elan', address: 'Paguyaman'),
+    Mahasiswa(nim: 178, name: 'Ferdi', address: 'Batudaa'),
+    Mahasiswa(nim: 190, name: 'Fandi', address: 'Bongomeme')
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(  
+      appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
       body: ListView.builder(
-        padding:EdgeInsets.all(16),
+        padding: EdgeInsets.all(16),
         itemBuilder: (context, index) {
-        return Card(
-          child: ListTile(
-            leading: CircleAvatar(backgroundColor: Color.fromARGB(255, 248, 41, 5), child: Text('$index'),
+          return InkWell(
+            onTap: () {
+              showDialog(
+                  context: context,
+                  builder: (_) {
+                    return AlertDialog(
+                      title: const Text('Data Mahasiswa'),
+                      content: Column(children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            const Text('Name : '),
+                            Text(listMahasiswa[index].name)
+                          ],
+                        ),
+                      ]),
+                    );
+                  });
+            },
+            child: ListTile(
+              leading: CircleAvatar(
+                backgroundColor: Color.fromARGB(255, 248, 41, 5),
+                child: Text('${listMahasiswa[index].nim}'),
+              ),
+              title: Text('${listMahasiswa[index].name}'),
+              subtitle: Text('${listMahasiswa[index].address}'),
             ),
-          title: Text('Siti'),
-          subtitle: Text('sedang belajar flutter'),
-          ),
-        );
-      },
-
-        itemCount: 20,
+          );
+        },
+        itemCount: listMahasiswa.length,
       ),
-
       floatingActionButton: FloatingActionButton(
-        onPressed:(){},
+        onPressed: () {},
         tooltip: 'Increment',
         child: const Icon(Icons.add),
-      ), 
+      ),
     );
   }
 }
